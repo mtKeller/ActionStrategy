@@ -1,0 +1,57 @@
+{
+  "name": "actiontree",
+  "version": "0.5.1",
+  "description": "Helpful binary tree strategy object designed for Reactive Redux based apps (ngRx, redux-observable). Which extrapolates said into a patterned Data Driven Architecture",
+  "main": "dist/out-tsc/ActionTree.class.js",
+  "types": "dist/out-tsc/ActionTree.class.d.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
+    "lint": "tslint -p tsconfig.json",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm run lint",
+    "preversion": "npm run lint",
+    "version": "npm run format && git add -A",
+    "postversion": "git push && git push --tags"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mtKeller/ActionTree.git"
+  },
+  "keywords": [
+    "redux",
+    "ngrx",
+    "actiontree",
+    "action-tree",
+    "reactive",
+    "rxjs",
+    "action",
+    "binary-tree",
+    "pattern",
+    "control-structure",
+    "strategy"
+  ],
+  "files": [
+    "dist/**/*"
+  ],
+  "author": "Micah T. Keller",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mtKeller/ActionTree/issues"
+  },
+  "homepage": "https://github.com/mtKeller/ActionTree#readme",
+  "devDependencies": {
+    "@angular/compiler": "^7.1.2",
+    "@angular/core": "^7.1.2",
+    "@ngrx/store": "^6.1.2",
+    "@types/angular": "^1.6.51",
+    "@types/node": "^10.12.12",
+    "codelyzer": "^4.5.0",
+    "prettier": "^1.15.3",
+    "rxjs": "^6.3.3",
+    "tslint": "^5.11.0",
+    "tslint-config-prettier": "^1.17.0",
+    "typescript": "^3.2.2"
+  }
+}
