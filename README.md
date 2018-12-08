@@ -85,7 +85,7 @@ import { END_OF_ACTION_STRATEGY } from 'actionstrategy';
 // ...
 ```
 
-Below is an example implementation of aa http strategic effect. Which passes the Action's Strategy's payload to the angular httpclient get function. Then dispatches it's next ActionNode conditionally, if success it appends the returned data to the Strategy's payload. Otherwise it exits.
+Below is an example implementation of an http get request strategic effect. Which passes the Action's Strategy's payload to the angular httpclient. On completion, it dispatches the ActionStrategy's next ActionNode conditionally, if success it appends the returned data to the Strategy's payload. Otherwise it exits.
 
 ```javascript
 @Effect
