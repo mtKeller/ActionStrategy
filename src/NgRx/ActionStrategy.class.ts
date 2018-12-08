@@ -3,16 +3,16 @@ import { Action, Store } from '@ngrx/store';
 declare module '@ngrx/store' {
   interface Action {
     type: string;
-    tree?: ActionTree;
+    strategy?: ActionStrategy;
     payload?: any;
   }
 }
 
-export const END_OF_ACTION_TREE = 'END_OF_ACTION_TREE';
+export const END_OF_ACTION_STRATEGY = 'END_OF_ACTION_TREE';
 
-export class EndOfActionTree implements Action {
-  readonly type = END_OF_ACTION_TREE;
-  constructor(public tree: ActionTree) {}
+export class EndOfActionStrategy implements Action {
+  readonly type = END_OF_ACTION_STRATEGY;
+  constructor(public tree: ActionStrategy) {}
 }
 
 export interface ActionNode {
@@ -22,19 +22,19 @@ export interface ActionNode {
   payload?: any;
 }
 
-export interface ActionTreeParams {
+export interface ActionStrategyParams {
   payload: any;
   actionNode: ActionNode;
   store: Store<any>;
 }
 
-export class ActionTree {
+export class ActionStrategy {
   payload: any;
   currentNode: ActionNode;
   actionList: Array<string> = [];
   store: Store<any>;
   lastAction: Action;
-  constructor(params: ActionTreeParams) {
+  constructor(params: ActionStrategyParams) {
     this.lastAction = params.actionNode.initAction;
     this.payload = params.payload;
     this.currentNode = params.actionNode;
@@ -44,25 +44,25 @@ export class ActionTree {
     this.store = params.store;
   }
   begin(): Action {
-    this.currentNode.initAction.tree = this;
+    this.currentNode.initAction.strategy = this;
     if (this.currentNode.initAction !== null) {
       if (this.currentNode.payload) {
         this.currentNode.initAction.payload = this.currentNode.payload;
       }
       return this.currentNode.initAction;
     } else {
-      return new EndOfActionTree(this);
+      return new EndOfActionStrategy(this);
     }
   }
   init() {
-    this.currentNode.initAction.tree = this;
+    this.currentNode.initAction.strategy = this;
     if (this.currentNode.initAction !== null) {
       if (this.currentNode.payload) {
         this.currentNode.initAction.payload = this.currentNode.payload;
       }
       this.store.dispatch(this.currentNode.initAction);
     } else {
-      this.store.dispatch(new EndOfActionTree(this));
+      this.store.dispatch(new EndOfActionStrategy(this));
     }
   }
   success(payload?: any) {
@@ -77,12 +77,12 @@ export class ActionTree {
       //     this.payload = this.currentNode.payload;
       // }
     } else {
-      this.actionList.push('Success: ' + END_OF_ACTION_TREE);
-      return new EndOfActionTree(this);
+      this.actionList.push('Success: ' + END_OF_ACTION_STRATEGY);
+      return new EndOfActionStrategy(this);
     }
     this.actionList.push('Success: ' + nextNode.type);
     this.lastAction = nextNode;
-    nextNode.tree = this;
+    nextNode.strategy = this;
     if (this.currentNode.payload !== null && this.currentNode.payload !== undefined) {
       nextNode.payload = this.currentNode.payload;
     }
@@ -100,12 +100,12 @@ export class ActionTree {
         this.payload = this.currentNode.payload;
       }
     } else {
-      this.actionList.push('Failed: ' + END_OF_ACTION_TREE);
-      return new EndOfActionTree(this);
+      this.actionList.push('Failed: ' + END_OF_ACTION_STRATEGY);
+      return new EndOfActionStrategy(this);
     }
     this.actionList.push('Failed: ' + this.lastAction.type);
     this.lastAction = nextNode;
-    nextNode.tree = this;
+    nextNode.strategy = this;
     if (this.currentNode.payload !== null && this.currentNode.payload !== undefined) {
       nextNode.payload = this.currentNode.payload;
     }

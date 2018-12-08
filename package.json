@@ -1,5 +1,5 @@
 {
-  "name": "actiontree",
+  "name": "actionstrategy",
   "version": "0.5.1",
   "description": "Helpful binary tree strategy object designed for Reactive Redux based apps (ngRx, redux-observable). Which extrapolates said into a patterned Data Driven Architecture",
   "main": "dist/out-tsc/ActionTree.class.js",
