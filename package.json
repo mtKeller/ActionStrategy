@@ -1,6 +1,6 @@
 {
   "name": "actionstrategy",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Helpful binary tree strategy object designed for Reactive Redux based apps (ngRx, redux-observable). Which extrapolates said into a patterned Data Driven Architecture",
   "main": "dist/ActionStrategy",
   "types": "dist/ActionStrategy.d.ts",

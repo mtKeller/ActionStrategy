@@ -166,8 +166,8 @@ The power of NgRx Effects in combination with ActionStrategy, is that the implem
 
 ## Testing
 
-Although this is v0.5 the ActionStrategy Object itself is solid.
-And do it it's generative nature the best means I have found to test it is to log each ActionStrategy object to console and dig into it's parameters. Mainly: actionList which is an array of steps taking.
+Although this is not the official v1 the ActionStrategy Object itself is solid on the NgRx platform.
+And due it it's generative nature, the best means I have found to test it is to log each ActionStrategy object to console. Then dig into it's parameters. Namely: actionList which is an array of steps taking.
 
 If you find this and understand why it was made. Have fun. ;) If you have any questions, or comments please find my contact information on my site [rellek.io](rellek.io)
 
