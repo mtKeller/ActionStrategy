@@ -166,9 +166,9 @@ The power of NgRx Effects in combination with ActionStrategy, is that the implem
 
 ## Testing
 
-Although this is v0.5.1 the ActionStrategy Object itself is solid.
+Although this is v0.5 the ActionStrategy Object itself is solid.
 And do it it's generative nature the best means I have found to test it is to log each ActionStrategy object to console and dig into it's parameters. Mainly: actionList which is an array of steps taking.
 
 If you find this and understand why it was made. Have fun. ;) If you have any questions, or comments please find my contact information on my site [rellek.io](rellek.io)
 
-Final version will also implement ActionStrategy for redux-observable. Then will create a GUI to destroy the amount of boiler plate that must be written, in addition to creating an interface to better represent each ActionStrategy. As the inherit issue of writing such is that a binary tree is 2d, where as coding is 1D.
+Final version will also implement ActionStrategy for redux-observable. Then will create a GUI to destroy the amount of boiler plate that must be written, in addition to creating an interface to better represent each ActionStrategy. As the inherit issue of writing such is that a binary tree is a 2D, where as coding is typed in a serialized manner.

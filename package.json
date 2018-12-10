@@ -1,9 +1,9 @@
 {
   "name": "actionstrategy",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "description": "Helpful binary tree strategy object designed for Reactive Redux based apps (ngRx, redux-observable). Which extrapolates said into a patterned Data Driven Architecture",
-  "main": "dist/out-tsc/ActionTree.class.js",
-  "types": "dist/out-tsc/ActionTree.class.d.js",
+  "main": "dist/ActionStrategy",
+  "types": "dist/ActionStrategy.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
