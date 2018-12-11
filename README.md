@@ -153,13 +153,46 @@ export function genActionStrategyExample(store: Store<any>, targetFile?: string)
 }
 ```
 
+#### Initialization
+
+ActionStrategy has two starting points in their execution. begin() and init()
+
+##### begin()
+
+This will return the current action in you ActionStrategy tree. Rather than the success or failure actions. Use case:
+
+```javascript
+this.store.dispatch(ExampleActionStrategy.begin()); // versus this.store.dispatch(new ActionEx())
+
+//or internally in the effects it can be used to switch active strategies
+@Effect
+    MainExampleStrategy$: Observable<any> = this.actions$
+            .pipe(
+                ofType(EXAMPLE_STRATEGY),
+                map(action => {
+                    const NewActionStrategy: ActionStrategy = generateExampleStrategy(this.store);
+                    return NewActionStrategy.begin();
+                })) // Handle final logs, optionally set feature loading to false
+            );
+// ...
+```
+
+##### init()
+
+Is a self dispatch function call.
+
+```javascript
+const NewActionStrategy: ActionStrategy = generateExampleStrategy(this.store);
+ExampleActionStrategy.init(); // is the same as this.store.dispatch(ExampleActionStrategy.begin());
+```
+
 ## Ultimately
 
 What this approach seeks to accomplish is to establish a genuine Data Driven Architecture that is maintainable and encapsulated from the main state via the internal handling of **the ActionStrategy payload** in NgRx.
 The goal of each implementation should be a verbose declaration of steps needed to solve a problem. In the pseudo example we created this sentence:
 
 ```javascript
-// Retrieve a text file from the server; if we encounter an error send to our log service; otherwise parse out the hero names in the file; finally, then finally add it to the UI.
+// Retrieve a text file from the server; if we encounter an error send to our log service; otherwise parse out the hero names in the file; finally, add parsed data to the UI.
 ```
 
 The power of NgRx Effects in combination with ActionStrategy, is that the implementation of per problem is obfuscated. As long as each strategic action returns the next, **what matters is the steps to solving the larger goal.** Where the implementation is handled does not matter, this approach merely encapsulates NodeJS's advantage in the i/o in comparison to other platforms.
@@ -169,6 +202,6 @@ The power of NgRx Effects in combination with ActionStrategy, is that the implem
 Although this is not the official v1 the ActionStrategy Object itself is solid on the NgRx platform.
 And due it it's generative nature, the best means I have found to test it is to log each ActionStrategy object to console. Then dig into it's parameters. Namely: actionList which is an array of steps taking.
 
-If you find this and understand why it was made. Have fun. ;) If you have any questions, or comments please find my contact information on my site [rellek.io](rellek.io)
+If you find this and understand why it was made. Have fun. ;) If you have any questions, or comments please feel free to open an issue or find my contact through the ActionStrategy repository github page.
 
 Final version will also implement ActionStrategy for redux-observable. Then will create a GUI to destroy the amount of boiler plate that must be written, in addition to creating an interface to better represent each ActionStrategy. As the inherit issue of writing such is that a binary tree is a 2D, where as coding is typed in a serialized manner.
