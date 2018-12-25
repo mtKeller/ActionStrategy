@@ -22,7 +22,7 @@ To avoid breaking the UI when borrowing slices of state.
 
 ## UPDATES
 
-v0.7.5
+v0.7.6
 
 * Removed init(), and therefore the need to pass the store reference. This helps keep ActionStrategy Functional and reduce side effects.
 
@@ -220,4 +220,4 @@ And due it it's generative nature, the best means I have found to test it is to 
 
 If you find this and understand why it was made. Have fun with it, this is a genuine new approach to application programming and this README is just the tip of the iceberg. If you have any questions, or comments please feel free to open an issue or find my contact through the ActionStrategy's repository github page.
 
-CI tests to come along revealing a proof of concept application.
+CI tests to come along with revealing a proof of concept application.
