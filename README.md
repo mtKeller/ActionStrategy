@@ -6,7 +6,19 @@ Otherwise understand that what this approach accomplishes is exploitation of NgR
 
 An ActionStrategy is a D.D.A. (Data Driven Architecture) *control structure*. Which implements strategy via ActionStrategy generative functions, or can be statically defined for normal routines. Which encompasses the binary tree pattern via chaining ActionNodes.
 
-It is highly suggested to utilize [DynamicEntity](https://www.npmjs.com/package/dynamicentity) in conjunction with this project. As what should become apparent, is that this approach to programming without necessary control structures will cause memory leaks due to it's speed. DynamicEntity allows for the concept of borrowing slices of state which fits into the no side effect paradigm of Function Programing in regards to reducers. In addition keep in mind the use of stacks and ques to handle logic.
+This approach can easily create memory races in JS, therefore we suggest the use of [DynamicEntity](https://www.npmjs.com/package/dynamicentity) in conjunction with this project. DynamicEntity allows for the concept of borrowing slices of state which fits into the no side effect paradigm of Function Programing in regards to reducers. In addition keep in mind the use of stacks and ques to handle logic. Just be sure to add:
+
+```javascript
+this.store.pipe(
+    select(sliceOfState)
+).subscribe((val) => {
+    if (val !== undefined) {
+        this.prop = val;
+    }
+})
+```
+
+To avoid breaking the UI when borrowing slices of state.
 
 ## UPDATES
 
@@ -208,4 +220,4 @@ And due it it's generative nature, the best means I have found to test it is to 
 
 If you find this and understand why it was made. Have fun with it, this is a genuine new approach to application programming and this README is just the tip of the iceberg. If you have any questions, or comments please feel free to open an issue or find my contact through the ActionStrategy's repository github page.
 
-CI tests to come.
+CI tests to come along revealing a proof of concept application.
