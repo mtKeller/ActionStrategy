@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://github.com/mtKeller/Tactician
  */
 
-import { Action, Store } from '@ngrx/store';
+import { Action } from '@ngrx/store';
 
 declare module '@ngrx/store' {
   interface Action {
@@ -64,13 +64,11 @@ export interface ActionNode {
  *
  * @param payload - Payload to be carried throughout the strategy.
  * @param initialNode - Starting point of your ActionStrategy
- * @param store - Allows ActionStrategy to dispatch itself.
  */
 
 export interface ActionStrategyParams {
   payload: any;
   initialNode: ActionNode;
-  store: Store<any>;
 }
 
 /**
@@ -78,7 +76,7 @@ export interface ActionStrategyParams {
  * Strategy Pattern that utilizes NgRx's Action to facilitate a verbose approach to programmatic problem solving.
  *
  * @param params - Takes an object interface of:
- * `ActionStrategyParams { payload: any; initialNode: ActionNode; store: Store<any>; }`
+ * `ActionStrategyParams { payload: any; initialNode: ActionNode; }`
  *
  * @function begin() - Will return the current Action without advancing the stage.
  * @function success() - Returns the action of the current successNode and assigns itself to it's `strategy` parameter.
@@ -88,7 +86,6 @@ export class ActionStrategy {
   payload: any;
   currentNode: ActionNode;
   actionList: Array<string> = [];
-  store: Store<any>;
   lastAction: Action;
   constructor(params: ActionStrategyParams) {
     this.lastAction = params.initialNode.action;
@@ -97,7 +94,6 @@ export class ActionStrategy {
     if (params.initialNode !== null) {
       this.actionList = ['[INITIAL ACTION]: ' + params.initialNode.action.type];
     }
-    this.store = params.store;
   }
   /**
    * @function begin() returns the current action

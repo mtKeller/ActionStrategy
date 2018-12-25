@@ -1,6 +1,6 @@
 {
   "name": "actionstrategy",
-  "version": "0.7.3",
+  "version": "0.7.5",
   "description": "Helpful binary tree strategy object designed for NgRx. Which extrapolates said into a patterned Data Driven Architecture.",
   "main": "dist/ActionStrategy",
   "types": "dist/ActionStrategy.d.ts",

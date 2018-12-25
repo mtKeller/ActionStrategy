@@ -10,6 +10,10 @@ It is highly suggested to utilize [DynamicEntity](https://www.npmjs.com/package/
 
 ## UPDATES
 
+v0.7.5
+
+* Removed init(), and therefore the need to pass the store reference. This helps keep ActionStrategy Functional and reduce side effects.
+
 v0.7.3
 
 * Created typescript tool tips.
@@ -134,7 +138,7 @@ import * as MainActions from '../Main/Main.actions.ts'; // For production, be su
 import * as HttpActions from '../Http/Http.actions.ts';
 import * as ParserActions from '../Parser/Parser.actions.ts';
 
-export function genActionStrategyExample(store: Store<any>, targetFile?: string) {
+export function genActionStrategyExample(targetFile?: string) {
     //Tier 2
     const ActionNodeAddHeroList: ActionNode = { // Success
         action: new MainActions.AddHeroList(),
@@ -158,20 +162,17 @@ export function genActionStrategyExample(store: Store<any>, targetFile?: string)
     const ActionParam: ActionParams = {
         payload: targetFile || 'something.txt',
         initialNode: ActionNodeGetFile,
-        store: store
     }
     const ActionStrategyExample: ActionStrategy = new ActionStrategy(ActionParam);
     return ActionStrategyExample;
 }
 ```
 
-#### Initialization
+### Initialization
 
-ActionStrategy has two starting points in their execution. begin() and init()
+#### begin()
 
-##### begin()
-
-This will return the current action in you ActionStrategy tree. Rather than the success or failure actions. Use case:
+This will return the current action in you ActionStrategy tree. Rather than the success or failure actions. Use case in Store dispatch and Effects:
 
 ```javascript
 this.store.dispatch(ExampleActionStrategy.begin()); // versus this.store.dispatch(new ActionEx())
@@ -187,15 +188,6 @@ this.store.dispatch(ExampleActionStrategy.begin()); // versus this.store.dispatc
                 })) // Handle final logs, optionally set feature loading to false
             );
 // ...
-```
-
-##### init()
-
-Is a self dispatch function call.
-
-```javascript
-const NewActionStrategy: ActionStrategy = generateExampleStrategy(this.store);
-ExampleActionStrategy.init(); // is the same as this.store.dispatch(ExampleActionStrategy.begin());
 ```
 
 ## Ultimately
