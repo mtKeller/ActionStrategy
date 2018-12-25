@@ -41,10 +41,10 @@ export class EndOfActionStrategy implements Action {
  * ActionNode
  * Control Structure used by ActionStrategy
  *
- * `NOTE` When creating Actions for initAction. There is no need to pass payload, or strategy parameters,
+ * `NOTE` When creating Actions for action. There is no need to pass payload, or strategy parameters,
  *  as ActionStrategy takes care of that behind the scenes.
  *
- * @param initAction - The Action to be dispatched by this node.
+ * @param action - Action to be dispatched.
  * @param successNode - Upon ActionStrategy.success() the Strategy will update itself to this node.
  * * If set to null, will default to EndOfActionStrategy on ActionStrategy.success().
  * @param failureNode - `optional` ActionStrategy.failed() will fire EndOfActionStrategy if left blank or set to null.
@@ -52,7 +52,7 @@ export class EndOfActionStrategy implements Action {
  */
 
 export interface ActionNode {
-  initAction: Action;
+  action: Action;
   successNode: ActionNode;
   failureNode?: ActionNode;
   payload?: any;
@@ -81,7 +81,7 @@ export interface ActionStrategyParams {
  * `ActionStrategyParams { payload: any; initialNode: ActionNode; store: Store<any>; }`
  *
  * @function begin() - Will return the current Action without advancing the stage.
- * @function success() - Returns the initAction of the current successNode and assigns itself to it's `strategy` parameter.
+ * @function success() - Returns the action of the current successNode and assigns itself to it's `strategy` parameter.
  * @function failed() - Returns the current failureNode or EndOfActionTree if set to null.
  */
 export class ActionStrategy {
@@ -91,25 +91,25 @@ export class ActionStrategy {
   store: Store<any>;
   lastAction: Action;
   constructor(params: ActionStrategyParams) {
-    this.lastAction = params.initialNode.initAction;
+    this.lastAction = params.initialNode.action;
     this.payload = params.payload;
     this.currentNode = params.initialNode;
     if (params.initialNode !== null) {
-      this.actionList = ['[INITIAL ACTION]: ' + params.initialNode.initAction.type];
+      this.actionList = ['[INITIAL ACTION]: ' + params.initialNode.action.type];
     }
     this.store = params.store;
   }
   /**
-   * @function begin() returns the current initAction
+   * @function begin() returns the current action
    * Used to chain NgRx Effects together in a cohesive fashion.
    */
   begin(): Action {
-    this.currentNode.initAction.strategy = this;
-    if (this.currentNode.initAction !== null) {
+    this.currentNode.action.strategy = this;
+    if (this.currentNode.action !== null) {
       if (this.currentNode.payload) {
-        this.currentNode.initAction.payload = this.currentNode.payload;
+        this.currentNode.action.payload = this.currentNode.payload;
       }
-      return this.currentNode.initAction;
+      return this.currentNode.action;
     } else {
       return new EndOfActionStrategy(this);
     }
@@ -127,7 +127,7 @@ export class ActionStrategy {
     }
     let nextAction: Action;
     if (this.currentNode.successNode !== null) {
-      nextAction = this.currentNode.successNode.initAction;
+      nextAction = this.currentNode.successNode.action;
       this.currentNode = this.currentNode.successNode;
     } else {
       this.actionList.push('Success: ' + END_OF_ACTION_STRATEGY);
@@ -154,7 +154,7 @@ export class ActionStrategy {
     }
     let nextAction: Action;
     if (this.currentNode.failureNode !== null && this.currentNode.failureNode !== undefined) {
-      nextAction = this.currentNode.failureNode.initAction;
+      nextAction = this.currentNode.failureNode.action;
       this.currentNode = this.currentNode.failureNode;
       if (this.currentNode.payload !== null && this.currentNode.payload !== undefined) {
         this.payload = this.currentNode.payload;

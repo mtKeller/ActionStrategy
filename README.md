@@ -10,26 +10,26 @@ It is highly suggested to utilize [DynamicEntity](https://www.npmjs.com/package/
 
 ## UPDATES
 
-v0.7.2
+v0.7.3
 
 * Created typescript tool tips.
 
-* Improved internal naming conventions.
+* Improved internal naming conventions and documentation consistency.
 
 ## Breakdown
 
-**NOTE** When creating Actions for initAction of ActionNode. There is no need to pass payload, or strategy parameters, as ActionStrategy takes care of that behind the scenes.
+**NOTE** When creating Actions for ActionNode, there is no need to pass payload or strategy parameters. As ActionStrategy takes care of linking behind the scenes.
 
 ```javascript
 export interface ActionNode {
-    initAction: Action;
+    action: Action;
     successNode: ActionNode;
     failureNode?: ActionNode;
     payload?: any;
 }
 ```
 
-The above is representative of a binary tree node. Data is equivalent to initAction. Left and right are implemented via Success and Failure.
+The above is representative of a binary tree node. Data is equivalent the assigned action. Left and right are implemented via Success and Failure.
 **Please note that each ActionNode's payload** is an override parameter to each overall ActionStrategy's own internal payload. More below.
 
 ### Set Up
@@ -70,7 +70,7 @@ export const GET_FILE = '[Http] GET_FILE';
 
 export class GetFile implements Action {
     readonly type = GET_FILE;
-    constructor(public strategy: ActionStrategy = null)
+    constructor(public strategy?: ActionStrategy = null) // STRATEGY MUST BE OPTIONAL
 }
 ```
 
@@ -112,9 +112,9 @@ Below is an example implementation of an http get request strategic effect. Whic
                                         return action.strategy.success({
                                             ...action.strategy.payload,
                                             data: data
-                                        }); // Calls the success node and appends the returned data to the ActionStrategy Encapsulated State
+                                        }); // Returns the success action and appends the returned data to the ActionStrategy Encapsulated Payload
                                     } else {
-                                        return action.strategy.failed() // Dispatches the failure ActionNode if the http service ran into an error
+                                        return action.strategy.failed() // Dispatches the failure ActionNode action if the http service ran into an error
                                     }
                                 })
                             );
@@ -137,27 +137,27 @@ import * as ParserActions from '../Parser/Parser.actions.ts';
 export function genActionStrategyExample(store: Store<any>, targetFile?: string) {
     //Tier 2
     const ActionNodeAddHeroList: ActionNode = { // Success
-        initAction: new MainActions.AddHeroList(),
-        successAction: null // End of ActionStrategy
+        action: new MainActions.AddHeroList(),
+        successNode: null // End of ActionStrategy
     }
     //Tier 1
     const ActionNodeGetHeroNamesFromFile: ActionNode = { // Success
-        initAction: new ParserActions.GetHeroNames(),
-        successAction: ActionNodeAddHeroList
+        action: new ParserActions.GetHeroNames(),
+        successNode: ActionNodeAddHeroList
     }
     const ActionNodeAppendLogError: ActionNode = { // Failure Condition
-        initAction: new HttpActions.AppendLogError(),
-        successAction: null // End of ActionStrategy
+        action: new HttpActions.AppendLogError(),
+        successNode: null // End of ActionStrategy
     }
     // Tier 0 Get File Node
     const ActionNodeGetFile: ActionNode = {
-        initAction: new HttpActions.GetFileFromServer(),
-        successAction: new ParserActions.getHeroNames(), // Extracts hero names from the txt file
-        failureAction: ActionNodeAppendLogError // Appends the error response then logs to console
+        action: new HttpActions.GetFileFromServer(),
+        successNode: new ParserActions.getHeroNames(), // Extracts hero names from the txt file
+        failureNode: ActionNodeAppendLogError // Appends the error response then logs to console
     }
     const ActionParam: ActionParams = {
         payload: targetFile || 'something.txt',
-        actionNode: ActionNodeGetFile,
+        initialNode: ActionNodeGetFile,
         store: store
     }
     const ActionStrategyExample: ActionStrategy = new ActionStrategy(ActionParam);
@@ -207,7 +207,7 @@ The goal of each implementation should be a verbose declaration of steps needed 
 // Retrieve a text file from the server; if we encounter an error send to our log service; otherwise parse out the hero names in the file; finally, add parsed data to the UI.
 ```
 
-The power of NgRx Effects in combination with ActionStrategy, is that the implementation of per problem is obfuscated. As long as each strategic action returns the next, **what matters is the steps to solving the larger goal.** Where the implementation is handled does not matter, this approach merely encapsulates NodeJS's advantage in the i/o in comparison to other platforms.
+The power of NgRx Effects in combination with ActionStrategy, is that the implementation of per problem is obfuscated. As long as each strategic action returns the next, **what matters is the steps to solving the larger goal.** Where the implementation is handled does not matter, this approach merely encapsulates NodeJS's advantage speed of I/O in comparison to other platforms.
 
 ## Testing
 
