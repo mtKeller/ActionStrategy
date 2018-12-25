@@ -4,9 +4,21 @@ A patterned binary tree strategy object designed for [NgRx](ngrx.io) based [Angu
 Before proceeding, be sure to be comfortable with NgRx and rxJs.
 Otherwise understand that what this approach accomplishes is exploitation of NgRx functional side effect handling, in order to chain a problem solving strategy nodes that maintain a encapsulated set of data.
 
-An ActionStrategy is a D.D.A. (Data Driven Architecture) *control structure*. Which implements strategy via ActionStrategy generative functions, or can be statically defined for normal routines. Which encompasses the binary tree pattern via chained ActionNode:
+An ActionStrategy is a D.D.A. (Data Driven Architecture) *control structure*. Which implements strategy via ActionStrategy generative functions, or can be statically defined for normal routines. Which encompasses the binary tree pattern via chaining ActionNodes.
+
+It is highly suggested to utilize [DynamicEntity](https://www.npmjs.com/package/dynamicentity) in conjunction with this project. As what should become apparent, is that this approach to programming without necessary control structures will cause memory leaks due to it's speed. DynamicEntity allows for the concept of borrowing slices of state which fits into the no side effect paradigm of Function Programing in regards to reducers. In addition keep in mind the use of stacks and ques to handle logic.
+
+## UPDATES
+
+v0.7.2
+
+* Created typescript tool tips.
+
+* Improved internal naming conventions.
 
 ## Breakdown
+
+**NOTE** When creating Actions for initAction of ActionNode. There is no need to pass payload, or strategy parameters, as ActionStrategy takes care of that behind the scenes.
 
 ```javascript
 export interface ActionNode {
@@ -25,7 +37,7 @@ The above is representative of a binary tree node. Data is equivalent to initAct
 Below is a hypothetical. First install via:
 
 ```bash
-npm i actionstrategy @ngrx/store
+npm i actionstrategy @ngrx/store @ngrx/effects --save
 ```
 
 To allow for proper typing be sure to include this declaration in your app.module.ts
@@ -202,6 +214,6 @@ The power of NgRx Effects in combination with ActionStrategy, is that the implem
 Although this is not the official v1 the ActionStrategy Object itself is solid on the NgRx platform.
 And due it it's generative nature, the best means I have found to test it is to log each ActionStrategy object to console. Then dig into it's parameters. Namely: actionList which is an array of steps taking.
 
-If you find this and understand why it was made. Have fun. ;) If you have any questions, or comments please feel free to open an issue or find my contact through the ActionStrategy repository github page.
+If you find this and understand why it was made. Have fun with it, this is a genuine new approach to application programming and this README is just the tip of the iceberg. If you have any questions, or comments please feel free to open an issue or find my contact through the ActionStrategy's repository github page.
 
-Final version will also implement ActionStrategy for redux-observable. Then will create a GUI to destroy the amount of boiler plate that must be written, in addition to creating an interface to better represent each ActionStrategy. As the inherit issue of writing such is that a binary tree is a 2D, where as coding is typed in a serialized manner.
+CI tests to come.
